@@ -1,35 +1,26 @@
+import "reflect-metadata";
 import * as express from "express";
-import { Request, Response } from "express";
+import { createConnection } from "typeorm";
+import userRouter from "./controllers/user";
+// import * as datasource from "../ormconfig.json";
+import { User } from "./entity/user";
+import datasource from './config/orm';
 
-// create and setup express app
-const app = express();
-app.use(express.json());
+createConnection(datasource as any)
+    .then(async conn => {
 
-// register routes
+        const userRepository = conn.getRepository(User);
+        const users = await userRepository.find()
 
-app.get("/users", function (req: Request, res: Response) {
-    // here we will have logic to return all users
-});
 
-app.get("/users/:id", function (req: Request, res: Response) {
-    // here we will have logic to return user by id
-});
+        const app = express();
+        app.use(express.json());
 
-app.post("/users", function (req: Request, res: Response) {
-    // here we will have logic to save a user
-});
+        app.use("/api", userRouter);
 
-app.put("/users/:id", function (req: Request, res: Response) {
-    // here we will have logic to update a user by a given user id
-});
+        const port = 5000;
 
-app.delete("/users/:id", function (req: Request, res: Response) {
-    // here we will have logic to delete a user by a given user id
-});
-
-const port = 5000;
-
-// start express server
-app.listen(port, () => {
-    console.log(`App running on port ${port}`);
-});
+        app.listen(port, () => {
+            console.log(`App running on port ${port}`);
+        });
+    })

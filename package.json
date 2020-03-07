@@ -4,6 +4,7 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
+    "kill-port": "sudo kill -9 `sudo lsof -t -i:5000`",
     "start": "node .",
     "start:dev": "nodemon .",
     "build:watch": "tsc --watch",
@@ -15,6 +16,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "mysql": "^2.18.1",
+    "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.24",
     "typescript": "^3.8.3"
   },
